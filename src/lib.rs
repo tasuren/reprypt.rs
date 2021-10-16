@@ -63,7 +63,6 @@ fn parse_key(mut key: String, mut key_length: usize, text_length: usize) -> Stri
 
 /// 渡された文字列の特定の位置にある文字を特定の位置に置き換える関数です。
 fn replace(mut text: String, length: usize, from: usize, to: usize) -> String {
-    println!("{} {} {}", text, from, to);
     let after = get_byindex(&text, to, Some(length));
     let end = to + 1;
     let end = if end < length {
@@ -85,12 +84,12 @@ fn replace(mut text: String, length: usize, from: usize, to: usize) -> String {
 /// 渡された文字列を暗号化します。
 pub fn encrypt(
     mut text: String, _key: String, mode: &str, convert: bool
-) -> Option<String> {
-    // デコードをするべきならデコードをする
+) -> String {
+    // デコードをするべきならデコードをする。(強度向上のため。)
     if convert {
         text = encode(text, mode);
     }
-    // パスワードなど色々整える。
+
     let mut key_index: usize = 0;
     let text_length = text.len();
     let key = parse_key(
@@ -101,11 +100,41 @@ pub fn encrypt(
     let mut target: usize;
     for index in 0..text.len() {
         key_index += 1;
-        target = get_byindex(&key, key_index - 1, Some(text_length)).parse().unwrap();
+        target = get_byindex(
+            &key, key_index - 1, Some(text_length)
+        ).parse().unwrap();
         if target >= text_length {
             target = (target / 2) as usize;
         };
         text = replace(text, text_length, index, target);
     };
-    Some(text)
+    text
+}
+
+
+/// 渡された文字列を復号化します。
+pub fn decrypt(
+    mut text: String, _key: String, mode: &str, convert: bool
+) -> Option<String> {
+    let text_length = text.len();
+    let key = parse_key(
+        convert_unicode(&_key),
+        (&_key).len(), text_length
+    );
+    let mut key_index = text_length;
+    let mut target: usize;
+    // 復号化する。
+    for index in (0..text_length).rev() {
+        key_index -= 1;
+        target = get_byindex(
+            &key, key_index, Some(text_length)
+        ).parse().unwrap();
+        if target >= text_length {
+            target = (target / 2) as usize;
+        }
+        text = replace(text, text_length, target, index);
+    };
+    // もしデコードするべきならデコードを行う。
+    let new_text = if convert { decode(text, mode) } else { Some(text) };
+    new_text
 }
