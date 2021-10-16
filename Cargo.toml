@@ -2,6 +2,13 @@
 name = "reprypt"
 version = "0.1.0"
 edition = "2018"
+authors = ["tasuren <tasuren5@gmail.com>"]
+repository = "https://github.com/tasuren/reprypt.rs"
+keywords = ["encryption"]
+license-file = "LICENSE"
+readme = "README.md"
+description = "A simple encryption library."
+documentation = "https://tasuren.github.io/reprypt.rs"
 
 [dependencies]
 base64 = "0.13.0"
