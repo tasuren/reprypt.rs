@@ -63,6 +63,7 @@ fn parse_key(mut key: String, mut key_length: usize, text_length: usize) -> Stri
 
 /// 渡された文字列の特定の位置にある文字を特定の位置に置き換える関数です。
 fn replace(mut text: String, length: usize, from: usize, to: usize) -> String {
+    println!("{} {} {}", text, from, to);
     let after = get_byindex(&text, to, Some(length));
     let end = to + 1;
     let end = if end < length {
@@ -99,17 +100,12 @@ pub fn encrypt(
     // 暗号化する。
     let mut target: usize;
     for index in 0..text.len() {
-        if key_index != 0 {
-            key_index += 1;
-        };
-        target = get_byindex(&key, key_index, Some(text_length)).parse().unwrap();
+        key_index += 1;
+        target = get_byindex(&key, key_index - 1, Some(text_length)).parse().unwrap();
         if target >= text_length {
             target = (target / 2) as usize;
         };
         text = replace(text, text_length, index, target);
-        if key_index == 0 {
-            key_index += 1
-        };
     };
     Some(text)
 }
