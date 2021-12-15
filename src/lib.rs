@@ -1,29 +1,5 @@
-//! # Reprypt
-//! Repryptという暗号化モジュールです。
-
-
-/// 指定されたモードでデコードまたは変換を行う。
-/// 例：base64
-fn decode(text: String, mode: &str) -> Option<String> {
-    match mode {
-        "base64" => {
-            match base64::decode(text) {
-                Ok(v) => String::from_utf8(v).ok(),
-                _ => None,
-            }
-        },
-        _ => panic!("That mode is not supported.")
-    }
-}
-
-
-/// 指定されたモードでエンコードまたは変換を行う。
-fn encode(text: String, mode: &str) -> String {
-    match mode {
-        "base64" => base64::encode(text),
-        _ => panic!("That mode is not supported.")
-    }
-}
+//! # reprypt.rs
+//! This is a library for Rust for Reprypt, which is one encryption method.
 
 
 /// 渡された文字列の指定されたインデックスにある文字を取り出す。
@@ -84,13 +60,14 @@ fn replace(mut text: String, length: usize, from: usize, to: usize) -> String {
 }
 
 
-/// 渡された文字列を暗号化します。
-pub fn encrypt(
-    mut text: String, _key: String, mode: &str, convert: bool
-) -> String {
+/// Encrypt the passed string.
+/// * `text` - The string to encrypt.
+/// * `_key` - password
+/// * `convert` - Whether to do the conversion in Base64. It is recommended to set this to `true` because without it, the only characters in the encrypted string will be those in the original string.
+pub fn encrypt(mut text: String, _key: String, convert: bool) -> String {
     // デコードをするべきならデコードをする。(強度向上のため。)
     if convert {
-        text = encode(text, mode);
+        text = base64::encode(text);
     }
 
     let mut key_index: usize = 0;
@@ -114,10 +91,11 @@ pub fn encrypt(
 }
 
 
-/// 渡された文字列を復号化します。
-pub fn decrypt(
-    mut text: String, _key: String, mode: &str, convert: bool
-) -> Option<String> {
+/// Decrypt the passed string.
+/// * `text` - string to decrypt.
+/// * `_key` - password
+/// * `convert` - whether or not to decode with Base64, set this to `true` if Base64 does the conversion during encryption.
+pub fn decrypt(mut text: String, _key: String, convert: bool) -> Option<String> {
     let text_length = text.len();
     let mut key = convert_unicode(&_key);
     let key_length = (&key).len();
@@ -136,6 +114,8 @@ pub fn decrypt(
         text = replace(text, text_length, target, index);
     };
     // もしデコードするべきならデコードを行う。
-    let new_text = if convert { decode(text, mode) } else { Some(text) };
+    let new_text = if convert {
+        String::from_utf8(base64::decode(text).ok()?).ok()
+    } else { Some(text) };
     new_text
 }
