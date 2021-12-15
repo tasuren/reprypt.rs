@@ -38,10 +38,12 @@ fn get_byindex(text: &String, index: usize, length: Option<usize>) -> String {
 
 /// Unicodeポイントに変換する。
 fn convert_unicode(text: &String) -> String {
+    // debug: println!("Raw Key: {}", &text);
     let mut new = String::new();
     for char in text.as_str().chars() {
         new += &((char as u32).to_string());
     };
+    // debug: println!("Raw Key: {}", &new);
     new
 }
 
@@ -63,6 +65,7 @@ fn parse_key(mut key: String, mut key_length: usize, text_length: usize) -> Stri
 
 /// 渡された文字列の特定の位置にある文字を特定の位置に置き換える関数です。
 fn replace(mut text: String, length: usize, from: usize, to: usize) -> String {
+    // debug: println!("{} {} {}", text, from, to);
     let after = get_byindex(&text, to, Some(length));
     let end = to + 1;
     let end = if end < length {
@@ -92,10 +95,9 @@ pub fn encrypt(
 
     let mut key_index: usize = 0;
     let text_length = text.len();
-    let key = parse_key(
-        convert_unicode(&_key),
-        (&_key).len(), text_length
-    );
+    let mut key = convert_unicode(&_key);
+    let key_length = (&key).len();
+    key = parse_key(key, key_length, text_length);
     // 暗号化する。
     let mut target: usize;
     for index in 0..text.len() {
@@ -117,10 +119,9 @@ pub fn decrypt(
     mut text: String, _key: String, mode: &str, convert: bool
 ) -> Option<String> {
     let text_length = text.len();
-    let key = parse_key(
-        convert_unicode(&_key),
-        (&_key).len(), text_length
-    );
+    let mut key = convert_unicode(&_key);
+    let key_length = (&key).len();
+    key = parse_key(key, key_length, text_length);
     let mut key_index = text_length;
     let mut target: usize;
     // 復号化する。
