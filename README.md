@@ -15,4 +15,4 @@ reprypt = "0.1.0"
 ```
 
 ## Documentation
-You can see the documentation on [here](https://tasuren.github.io/reprypt.rs).
+You can see the documentation on [here](https://tasuren.github.io/reprypt.rs/).

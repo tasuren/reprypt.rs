@@ -4,7 +4,7 @@ use std::env;
 mod lib;
 
 
-const HELP: &str = "# Reprypt
+const HELP: &str = "# Reprypt v0.1.1
 Repryptで暗号化します。
 ## 使用方法
 暗号化：reprypt encrypt 内容 パスワード

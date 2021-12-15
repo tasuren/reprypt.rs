@@ -8,7 +8,7 @@ keywords = ["encryption"]
 license-file = "LICENSE"
 readme = "README.md"
 description = "A simple encryption library."
-documentation = "https://tasuren.github.io/reprypt.rs"
+documentation = "https://tasuren.github.io/reprypt.rs/"
 
 [dependencies]
 base64 = "0.13.0"
