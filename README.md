@@ -11,7 +11,7 @@ Result: z=92tZsix4QSvwBZ2VGIRv24gdbbgYgZW20IGdvXJLg=
 To use reprypt.rs, add this to your `Cargo.toml`.
 ```toml
 [dependencies]
-actix = "0.12"
+reprypt = "0.1.0"
 ```
 
 ## Documentation
