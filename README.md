@@ -3,8 +3,8 @@ This is a Rust library for encryption or decryption using the Reprypt encryption
 You can create the following ciphers:
 ```
 Text: Come on, get down on all fours.
-Password: HomoVideo
-Result: z=92tZsix4QSvwBZ2VGIRv24gdbbgYgZW20IGdvXJLg=
+Password: HVideo
+Result: z=GB9ZvIR2QiwZ2VZbSv0gtd2bg24YWxsg4IGdvXJLg=
 ```
 
 ## Usage
